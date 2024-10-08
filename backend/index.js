@@ -17,24 +17,28 @@ app.use(cookieParser())
 app.use(express.json());
 
 const port = process.env.PORT
-app.get('/',(req,res)=>{
-    res.send("Hello")
-})
-app.get('/profile',(req,res)=>{
-    const token = req.cookies.jwt
-    if (!token) {
-        return res.status(401).json({ message: 'Access denied. No token provided.' });
-    }
 
-    try {
-        const decoded = jwt.verify(token, "12345678qwert");
-        res.status(200).json({ message: 'Welcome to the profile page', user: decoded });
-    } catch (err) {
-        console.log(err)
-        res.status(403).json({ message: "err" });
-    }
-})
 app.use('/auth',routes)
+
+
+app.get("/validate/:username", async (req, res) => {
+    try {
+      const { username } = req.params;
+      const token = req.cookies.jwt;
+      if (!token) {
+        return res.status(401).json({ message: "No token provided" });
+      }
+      const decoded = jwt.verify(token, "12345678qwert");
+      console.log("Decoded token:", decoded);
+      if (username !== decoded.username) {
+        return res.status(401).json({ message: "Unauthorized User" })
+      }
+      return res.status(200).json({ message: "Token is valid", user: decoded });
+    } catch (error) {
+      console.error("Token validation error:", error);
+      return res.status(401).json({ message: "Invalid token" });
+    }
+  });
 app.listen(port,()=>{
     connect()
     console.log(`http://localhost:${port}`)

@@ -13,9 +13,10 @@ const navigation = [
     { name: 'Profile', href: '/profile' },
 ]
 
-const NavBar = () => {
+const NavBar = ({check}) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const path = usePathname()
+    
 
     return (
         <header className="absolute inset-x-0 top-0 z-50">
@@ -48,9 +49,13 @@ const NavBar = () => {
                     ))}
                 </div>
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                    <Link href="/signin" className="text-sm font-semibold leading-6 text-gray-900">
-                    Sign in <span aria-hidden="true">&rarr;</span>
-                    </Link>
+                    {check ? (
+                        <div className="text-sm font-semibold leading-6 text-gray-900 border py-3 px-[20px] rounded-2xl bg-blue-500">{check[0].toUpperCase()}</div>
+                    ) : (
+                        <Link href="/signin" className="text-sm font-semibold leading-6 text-gray-900">
+                            Sign in <span aria-hidden="true">&rarr;</span>
+                        </Link>
+                    )}
                 </div>
             </nav>
             <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">

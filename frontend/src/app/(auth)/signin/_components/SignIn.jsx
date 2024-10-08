@@ -26,8 +26,8 @@ const Signin = () => {
             })
             if(response.ok){
                 const result = await response.json()
-                console.log(result)
-                // router.push("/profile")
+                console.log(result.username)
+                router.push(`/dashboard/${result.username}`)
             }
             else{
                 const errorData = await response.json()

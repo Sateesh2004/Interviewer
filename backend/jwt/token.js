@@ -1,11 +1,10 @@
 import jwt from "jsonwebtoken"
 const token=(user,res)=>{
-    const signeduser = {
-        username:user.username,
-        email:user.email
-    }
     
-    const token = jwt.sign({signeduser},"12345678qwert",{expiresIn:"10days"})
+        const username=user.username
+        
+    
+    const token = jwt.sign({username},"12345678qwert",{expiresIn:"10days"})
     
     res.cookie("jwt",token,
         {
@@ -15,7 +14,7 @@ const token=(user,res)=>{
         }
     )
     return res.status(201).json({message:"Token created and User authenticated",
-        user:signeduser
+        username:username
     })
 
 }
