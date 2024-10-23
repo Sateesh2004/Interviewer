@@ -1,0 +1,7 @@
+{
+    "editor.fontFamily": "'cascadia code', Consolas, 'Courier New', monospace",
+    "editor.fontLigatures": true,
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 600,
+    "editor.fontSize": 16
+}

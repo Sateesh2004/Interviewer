@@ -1,22 +1,29 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 const navigation = [
-    { name: 'Home', href: '/' },   // Change the href to '/' for Home
+    { name: 'Home', href: '/' },
     { name: 'Dashboard', href: '/dashboard' },
     { name: 'About Us', href: '/about' },
     { name: 'Contact Us', href: '/contact' },
     { name: 'Profile', href: '/profile' },
 ]
 
-const NavBar = ({check}) => {
+const NavBar = ({ check }) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const path = usePathname()
-    
+    const router = useRouter()
+
+    useEffect(() => {
+        // If the user tries to access the dashboard without being authenticated, redirect them to sign-in page
+        if (!check && path === '/dashboard') {
+            router.push('/signin')
+        }
+    }, [check, path, router])
 
     return (
         <header className="absolute inset-x-0 top-0 z-50">
@@ -39,10 +46,10 @@ const NavBar = ({check}) => {
                 </div>
                 <div className="hidden lg:flex lg:gap-x-12">
                     {navigation.map((item) => (
-                        <Link 
-                            key={item.name} 
-                            href={item.href}
-                            className={`text-sm font-semibold leading-6 ${path === item.href ? 'text-blue-600' : 'text-gray-900'}`}
+                        <Link
+                            key={item.name}
+                            href={item.name === 'Dashboard' && check ? `/dashboard/${check}` : item.href}  
+                            className={`-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 ${path === item.href ? 'text-blue-600' : 'text-gray-900'} hover:bg-gray-50`}
                         >
                             {item.name}
                         </Link>
@@ -93,12 +100,13 @@ const NavBar = ({check}) => {
                                 ))}
                             </div>
                             <div className="py-6">
-                                <Link
-                                    href="/signin"
-                                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                                >
-                                    Log in
-                                </Link>
+                                {check ? (
+                                    <div className="text-sm font-semibold leading-6 text-gray-900 border py-3 px-[20px] rounded-2xl bg-blue-500">{check[0].toUpperCase()}</div>
+                                ) : (
+                                    <Link href="/signin" className="text-sm font-semibold leading-6 text-gray-900">
+                                        Sign in <span aria-hidden="true">&rarr;</span>
+                                    </Link>
+                                )}
                             </div>
                         </div>
                     </div>

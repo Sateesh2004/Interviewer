@@ -1,15 +1,34 @@
-
+"use client"
 import NavBar from '@/components/NavBar'
 import CallToAction from '@/components/ui/CalltoAction'
-
+import { useState } from 'react'
 
 export default function Home() {
+  const [signed,setSigned]=useState()
+
+ 
+  const validate = async ()=>{
+    const response = await fetch(`http://localhost:3100/validate`,{
+      method:"GET",
+      credentials: 'include',
+  
+    })
+    if(response.ok){
+      const result = await  response.json()
+      console.log(result)
+      console.log(result.user.username)
+      setSigned(result.user.username)
+    }
+    
+    
+  }
+  validate()
   
   
 
   return (
     <div className="bg-white">
-      <NavBar/>
+      <NavBar check={signed} />
 
       <div className="relative isolate px-6 pt-14 lg:px-8 ">
         <div

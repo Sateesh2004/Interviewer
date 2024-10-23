@@ -11,11 +11,13 @@ import {
 } from "@/components/ui/dialog"
 import { LoaderCircle } from 'lucide-react';
 import NavBar from '@/components/NavBar';
+import { useRouter } from 'next/navigation';
 
 const AddNewInterview =  ({username}) => {
- const [signed,setSigned]=useState("no")
+  const router = useRouter()
+  const [signed,setSigned]=useState("no")
 
-
+ 
   const validate = async ()=>{
     const response = await fetch(`http://localhost:3100/validate/${username}`,{
       method:"GET",
@@ -27,6 +29,9 @@ const AddNewInterview =  ({username}) => {
       console.log(result)
       console.log(result.user.username)
       setSigned(result.user.username)
+    }
+    else{
+      router.push("/signin")
     }
   }
   validate()
